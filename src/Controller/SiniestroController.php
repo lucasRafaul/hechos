@@ -14,7 +14,7 @@ class SiniestroController extends AbstractController
     public function list(): Response
     {
         $siniestros = [];
-        return $this->render('siniestro/list.html.twig', ['siniestros' => $siniestros]);
+        return $this->render('siniestro/listado.html.twig', ['siniestros' => $siniestros]);
     }
 
     #[Route('/new', name: 'siniestro_new')]

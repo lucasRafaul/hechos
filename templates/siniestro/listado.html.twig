@@ -1,0 +1,19 @@
+<h2>Listado de Siniestros</h2>
+<table class="table">
+<thead>
+<tr><th>ID</th><th>Fecha</th><th>Ubicación</th><th>Acciones</th></tr>
+</thead>
+<tbody>
+{% for s in siniestros %}
+<tr>
+<td>{{ s.id }}</td>
+<td>{{ s.fecha }}</td>
+<td>{{ s.ubicacion }}</td>
+<td>
+<a href="{{ path('siniestro_show', {'id': s.id}) }}" class="btn btn-sm btn-info">Ver</a>
+</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+<a href="{{ path('siniestro_new') }}" class="btn btn-success">Nuevo Siniestro</a>

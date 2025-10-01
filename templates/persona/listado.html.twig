@@ -1,0 +1,22 @@
+<h2>Listado de Personas</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th><th>Nombre</th><th>Apellido</th><th>DNI</th><th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in personas %}
+        <tr>
+            <td>{{ p.id }}</td>
+            <td>{{ p.nombre }}</td>
+            <td>{{ p.apellido }}</td>
+            <td>{{ p.dni }}</td>
+            <td>
+                <a href="{{ path('persona_edit', {'id': p.id}) }}" class="btn btn-sm btn-primary">Editar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{{ path('persona_new') }}" class="btn btn-success">Nueva Persona</a>

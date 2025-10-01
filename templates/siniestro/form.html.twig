@@ -1,0 +1,9 @@
+<h2>{{ siniestro ? 'Editar Siniestro' : 'Nuevo Siniestro' }}</h2>
+<form method="post">
+    <input type="date" name="fecha" placeholder="Fecha" value="{{ siniestro ? siniestro.fecha|date('Y-m-d') : '' }}">
+    <input type="text" name="localidad" placeholder="Localidad" value="{{ siniestro ? siniestro.localidad : '' }}">
+    <input type="text" name="calle" placeholder="Calle" value="{{ siniestro ? siniestro.calle : '' }}">
+    <input type="text" name="coordenadas" placeholder="Coordenadas" value="{{ siniestro ? siniestro.coordenadas : '' }}">
+    <textarea name="descripcion" placeholder="Descripción">{{ siniestro ? siniestro.descripcion : '' }}</textarea>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>

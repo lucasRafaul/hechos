@@ -16,7 +16,7 @@ class PersonaController extends AbstractController
     public function list(ManagerRegistry $doctrine): Response
     {
         $personas = $doctrine->getRepository(Persona::class)->findAll();
-        return $this->render('persona/list.html.twig', ['personas' => $personas]);
+        return $this->render('persona/listado.html.twig', ['personas' => $personas]);
     }
 
     #[Route('/new', name: 'persona_new')]
@@ -33,7 +33,7 @@ class PersonaController extends AbstractController
             return $this->redirectToRoute('persona_list');
         }
 
-        return $this->render('persona/form.html.twig', ['form' => $form->createView()]);
+        return $this->render('persona/form.html.twig', ['form' => $form->createView(),'persona' => $persona,]);
     }
 
     #[Route('/edit/{id}', name: 'persona_edit')]

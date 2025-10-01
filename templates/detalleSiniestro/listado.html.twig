@@ -1,0 +1,20 @@
+<h2>Detalle de Siniestros</h2>
+<table class="table">
+<thead>
+<tr>
+<th>ID</th><th>Persona</th><th>Siniestro</th><th>Rol</th><th>Estado alcohólico</th><th>% Alcohol</th>
+</tr>
+</thead>
+<tbody>
+{% for d in detalles %}
+<tr>
+<td>{{ d.id }}</td>
+<td>{{ d.id_persona }}</td>
+<td>{{ d.id_siniestro }}</td>
+<td>{{ d.rol }}</td>
+<td>{{ d.estado_alcoholico }}</td>
+<td>{{ d.porcentaje_alcohol }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>

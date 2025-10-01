@@ -1,0 +1,10 @@
+<h2>{{ persona ? 'Editar Persona' : 'Nueva Persona' }}</h2>
+<form method="post">
+    <input type="text" name="nombre" placeholder="Nombre" value="{{ persona ? persona.nombre : '' }}">
+    <input type="text" name="apellido" placeholder="Apellido" value="{{ persona ? persona.apellido : '' }}">
+    <input type="text" name="dni" placeholder="DNI" value="{{ persona ? persona.dni : '' }}">
+    <input type="date" name="fecha_nacimiento" placeholder="Fecha Nacimiento" value="{{ persona ? persona.fechaNacimiento|date('Y-m-d') : '' }}">
+    <input type="text" name="genero" placeholder="Género" value="{{ persona ? persona.genero : '' }}">
+    <input type="text" name="estado_civil" placeholder="Estado Civil" value="{{ persona ? persona.estadoCivil : '' }}">
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>

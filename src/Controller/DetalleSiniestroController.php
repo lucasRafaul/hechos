@@ -13,7 +13,7 @@ class DetalleSiniestroController extends AbstractController
     #[Route('/assign', name: 'detalle_assign')]
     public function assign(Request $request): Response
     {
-        return $this->render('detalle_siniestro/form.html.twig', [
+        return $this->render('detalleSiniestro/form.html.twig', [
             'detalle' => null
         ]);
     }
@@ -22,7 +22,7 @@ class DetalleSiniestroController extends AbstractController
     public function list(): Response
     {
         $detalles = [];
-        return $this->render('detalle_siniestro/list.html.twig', [
+        return $this->render('detalleSiniestro/listado.html.twig', [
             'detalles' => $detalles
         ]);
     }
