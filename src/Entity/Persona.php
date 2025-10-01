@@ -37,7 +37,7 @@ class Persona
     /**
      * @var Collection<int, DetalleSiniestro>
      */
-    #[ORM\ManyToMany(targetEntity: DetalleSiniestro::class, mappedBy: 'id_persona')]
+    #[ORM\OneToMany(mappedBy: 'persona', targetEntity: DetalleSiniestro::class, cascade: ['persist', 'remove'])]
     private Collection $detalleSiniestros;
 
     public function __construct()
@@ -130,20 +130,22 @@ class Persona
         return $this->detalleSiniestros;
     }
 
-    public function addDetalleSiniestro(DetalleSiniestro $detalleSiniestro): static
+    public function addDetalleSiniestro(DetalleSiniestro $detalle): static
     {
-        if (!$this->detalleSiniestros->contains($detalleSiniestro)) {
-            $this->detalleSiniestros->add($detalleSiniestro);
-            $detalleSiniestro->addIdPersona($this);
+        if (!$this->detalleSiniestros->contains($detalle)) {
+            $this->detalleSiniestros->add($detalle);
+            $detalle->getIdPersona($this);
         }
 
         return $this;
     }
 
-    public function removeDetalleSiniestro(DetalleSiniestro $detalleSiniestro): static
+    public function removeDetalleSiniestro(DetalleSiniestro $detalle): static
     {
-        if ($this->detalleSiniestros->removeElement($detalleSiniestro)) {
-            $detalleSiniestro->removeIdPersona($this);
+        if ($this->detalleSiniestros->removeElement($detalle)) {
+            if ($detalle->getIdPersona() === $this) {
+                $detalle->setIdPersona(null);
+            }
         }
 
         return $this;

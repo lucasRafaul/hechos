@@ -1,4 +1,23 @@
 <h2>{{ persona ? 'Editar Persona' : 'Nueva Persona' }}</h2>
+
+
+{{ form_start(form) }}
+    {{ form_row(form.nombre) }}
+    {{ form_row(form.apellido) }}
+    {{ form_row(form.dni) }}
+    {{ form_row(form.fechaNacimiento) }}
+    {{ form_row(form.genero) }}
+    {{ form_row(form.estadoCivil) }}
+    <button type="submit" class="btn btn-primary">Guardar</button>
+{{ form_end(form) }}
+
+
+
+
+
+
+
+{# <h2>{{ persona ? 'Editar Persona' : 'Nueva Persona' }}</h2>
 <form method="post">
     <input type="text" name="nombre" placeholder="Nombre" value="{{ persona ? persona.nombre : '' }}">
     <input type="text" name="apellido" placeholder="Apellido" value="{{ persona ? persona.apellido : '' }}">
@@ -7,4 +26,4 @@
     <input type="text" name="genero" placeholder="Género" value="{{ persona ? persona.genero : '' }}">
     <input type="text" name="estado_civil" placeholder="Estado Civil" value="{{ persona ? persona.estadoCivil : '' }}">
     <button type="submit" class="btn btn-primary">Guardar</button>
-</form>
+</form> #}
