@@ -13,9 +13,7 @@ class SiniestroType extends AbstractType
     {
         $builder
             ->add('fecha', DateTimeType::class, ['widget' => 'single_text'])
-            ->add('localidad', TextType::class)
-            ->add('calle', TextType::class)
-            ->add('coordenadas', TextType::class, ['required' => false])
+            ->add('ubicacion', TextType::class)
             ->add('descripcion', TextareaType::class);
     }
 

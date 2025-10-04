@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DetalleSiniestroRepository::class)]
+//#[UniqueEntity(fields: ['persona', 'siniestro', 'rol'], message: 'Esta persona ya tiene ese rol en este siniestro.')]
 class DetalleSiniestro
 {
     #[ORM\Id]
@@ -18,11 +19,9 @@ class DetalleSiniestro
     #[ORM\ManyToOne(inversedBy: 'detalleSiniestros')]
     private ?Siniestro $id_siniestro = null;
 
-    /**
-     * @var Collection<int, Persona>
-     */
-    #[ORM\ManyToMany(targetEntity: Persona::class, inversedBy: 'detalleSiniestros')]
-    private Collection $id_persona;
+    #[ORM\ManyToOne(inversedBy: 'detalleSiniestros')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Persona $id_persona = null;
 
     #[ORM\Column(length: 255)]
     private ?string $rol = null;
@@ -36,10 +35,6 @@ class DetalleSiniestro
     #[ORM\Column(length: 255)]
     private ?string $observaciones = null;
 
-    public function __construct()
-    {
-        $this->id_persona = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -58,26 +53,14 @@ class DetalleSiniestro
         return $this;
     }
 
-    /**
-     * @return Collection<int, Persona>
-     */
-    public function getIdPersona(): Collection
+    public function getIdPersona(): ?persona
     {
         return $this->id_persona;
     }
 
-    public function addIdPersona(Persona $idPersona): static
+    public function setIdPersona(?Persona $id_persona): static
     {
-        if (!$this->id_persona->contains($idPersona)) {
-            $this->id_persona->add($idPersona);
-        }
-
-        return $this;
-    }
-
-    public function removeIdPersona(Persona $idPersona): static
-    {
-        $this->id_persona->removeElement($idPersona);
+        $this->id_persona = $id_persona;
 
         return $this;
     }
