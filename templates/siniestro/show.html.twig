@@ -1,5 +1,5 @@
 <h2>Detalle del Siniestro</h2>
 <p>ID: {{ siniestro.id }}</p>
-<p>Fecha: {{ siniestro.fecha }}</p>
-<p>Ubicación: {{ siniestro.localidad }}, {{ siniestro.calle }}</p>
+<p>Fecha: {{ siniestro.fecha|date('Y-m-d') }}</p>
+<p>Ubicación: {{ siniestro.ubicacion }}
 <p>Descripción: {{ siniestro.descripcion }}</p>

@@ -40,9 +40,9 @@ class SiniestroController extends AbstractController
     }
 
     #[Route('/show/{id}', name: 'siniestro_show')]
-    public function show(int $id): Response
+    public function show(int $id,ManagerRegistry $doctrine ): Response
     {
-        $siniestro = null;
+        $siniestro = $doctrine->getRepository(Siniestro::class)->find($id);
         return $this->render('siniestro/show.html.twig', ['siniestro' => $siniestro]);
     }
 }
