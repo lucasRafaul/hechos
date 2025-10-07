@@ -9,6 +9,9 @@
 <td>{{ s.id }}</td>
 <td>{{ s.fecha|date('Y-m-d') }}</td>
 <td>{{ s.ubicacion }}</td>
+<td>{{ s.localidad ? s.localidad.nombre : 'Sin localidad' }}</td>
+<td>{{ s.clima ? s.clima.descripcion : 'Sin Clima' }}</td>
+<td>{{ s.ubicacion }}</td>
 <td>{{ s.descripcion }}</td>
 <td>
 <a href="{{ path('siniestro_show', {'id': s.id}) }}" class="btn btn-sm btn-info">Ver</a>

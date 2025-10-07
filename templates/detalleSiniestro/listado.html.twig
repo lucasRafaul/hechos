@@ -19,11 +19,12 @@
     {% for d in detalles %}
         <tr>
             <td>{{ d.id }}</td>
-            <td>{{ d.id_siniestro.ubicacion }} - {{ d.id_siniestro.fecha|date('Y-m-d H:i') }}</td>
-            <td>{{ d.id_persona.nombre }} {{ d.id_persona.apellido }}</td>
-            <td>{{ d.rol }}</td>
-            <td>{{ d.estado_alcoholico }}</td>
-            <td>{{ d.porcentaje_alcohol }}</td>
+            {#function($persona) { return $persona->getNombre().' '.$persona->getApellido()#}
+            <td>{{ d.idSiniestro.ubicacion() }} - {{ d.idSiniestro.fecha|date('Y-m-d H:i') }}</td>
+            <td>{{ d.idPersona.nombre }} {{ d.idPersona.apellido }}</td>
+            <td>{{ d.rol ? d.rol.descripcion : 'Sin rol' }}</td>
+            <td>{{ d.estadoAlcoholico }}</td>
+            <td>{{ d.porcentajeAlcohol }}</td>
             <td>{{ d.observaciones }}</td>
             <td>
                 <a href="{{ path('detalle_show', {'id': d.id}) }}">Ver</a>
