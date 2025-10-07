@@ -2,8 +2,10 @@
 namespace App\Form;
 
 use App\Entity\Persona;
+use App\Entity\Sexo;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\{TextType, DateType};
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,7 +18,11 @@ class PersonaType extends AbstractType
             ->add('apellido', TextType::class)
             ->add('dni', TextType::class)
             ->add('fechaNacimiento', DateType::class, ['widget' => 'single_text'])
-            ->add('genero', TextType::class)
+            #->add('genero', TextType::class)
+            ->add('genero', EntityType::class, [
+                'class' => Sexo::class,
+                'choice_label' => 'descripcion'
+            ])
             ->add('estadoCivil', TextType::class);
     }
 

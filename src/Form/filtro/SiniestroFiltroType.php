@@ -34,7 +34,7 @@ class SiniestroFiltroType extends AbstractType
             ])
             ->add('clima', EntityType::class, [
                 'class' => Clima::class,
-                'choice_label' => 'tipo',
+                'choice_label' => 'descripcion',
                 'required' => false,
                 'placeholder' => 'Cualquier clima',
             ])

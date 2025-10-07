@@ -4,6 +4,8 @@ namespace App\Form;
 use App\Entity\DetalleSiniestro;
 use App\Entity\Siniestro;
 use App\Entity\Persona;
+use App\Entity\Rol;
+use App\Entity\TipoVehiculo;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -23,12 +25,20 @@ class DetalleSiniestroType extends AbstractType
                 'class' => Persona::class,
                 'choice_label' => function($persona) { return $persona->getNombre().' '.$persona->getApellido(); }
             ])
-            ->add('rol', ChoiceType::class, [
-                'choices' => [
-                    'Víctima' => 'víctima',
-                    'Autor' => 'autor',
-                    'Testigo' => 'testigo'
-                ]
+            #->add('rol', ChoiceType::class, [
+                #'choices' => [
+                    #'Víctima' => 'víctima',
+                    #'Autor' => 'autor',
+                    #'Testigo' => 'testigo'
+                #]
+            #])
+            ->add('rol', EntityType::class, [
+                'class' => Rol::class,
+                'choice_label' => 'descripcion' 
+            ])
+            ->add('tipo_vehiculo', EntityType::class, [
+                'class' => TipoVehiculo::class,
+                'choice_label' => 'descripcion' 
             ])
             ->add('estadoAlcoholico', TextType::class)
             ->add('porcentajeAlcohol', NumberType::class, ['required' => false])

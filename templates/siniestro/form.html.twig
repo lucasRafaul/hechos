@@ -1,8 +1,11 @@
 <h2>{{ siniestro ? 'Editar Siniestro' : 'Nuevo Siniestro' }}</h2>
 {{ form_start(form) }}
-    {{ form_row(form.fecha|date('Y-m-d')) }}
+    {{ form_row(form.fecha) }}
     {{ form_row(form.ubicacion) }}
-    {{ form_row(form.descripcion) }}
+    {{ form_row(form.localidad) }}
+    {{ form_row(form.clima) }}
+    {{ form_row(form.calle) }}
+    {{ form_row(form.altura) }}
     <button class="btn btn-primary">Guardar</button>
 {{ form_end(form) }}
 
