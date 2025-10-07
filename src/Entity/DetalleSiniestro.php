@@ -23,8 +23,8 @@ class DetalleSiniestro
     #[ORM\JoinColumn(nullable: false)]
     private ?Persona $id_persona = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $rol = null;
+    ##[ORM\Column(length: 255)]
+    #private ?string $rol = null;
 
     #[ORM\Column(length: 255)]
     private ?string $estado_alcoholico = null;
@@ -34,6 +34,12 @@ class DetalleSiniestro
 
     #[ORM\Column(length: 255)]
     private ?string $observaciones = null;
+
+    #[ORM\ManyToOne(inversedBy: 'detalleSiniestros')]
+    private ?Rol $rol = null;
+
+    #[ORM\ManyToOne(inversedBy: 'detalleSiniestros')]
+    private ?TipoVehiculo $tipoVehiculo = null;
 
 
     public function getId(): ?int
@@ -65,17 +71,17 @@ class DetalleSiniestro
         return $this;
     }
 
-    public function getRol(): ?string
-    {
-        return $this->rol;
-    }
+    #public function getRol(): ?string
+    #{
+        #return $this->rol;
+    #}
 
-    public function setRol(string $rol): static
-    {
-        $this->rol = $rol;
+    #public function setRol(string $rol): static
+    #{
+        #$this->rol = $rol;
 
-        return $this;
-    }
+        #return $this;
+    #}
 
     public function getEstadoAlcoholico(): ?string
     {
@@ -109,6 +115,30 @@ class DetalleSiniestro
     public function setObservaciones(string $observaciones): static
     {
         $this->observaciones = $observaciones;
+
+        return $this;
+    }
+
+    public function getRol(): ?Rol
+    {
+        return $this->rol;
+    }
+
+    public function setRol(?Rol $rol): static
+    {
+        $this->rol = $rol;
+
+        return $this;
+    }
+
+    public function getTipoVehiculo(): ?TipoVehiculo
+    {
+        return $this->tipoVehiculo;
+    }
+
+    public function setTipoVehiculo(?TipoVehiculo $tipoVehiculo): static
+    {
+        $this->tipoVehiculo = $tipoVehiculo;
 
         return $this;
     }

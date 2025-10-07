@@ -2,26 +2,26 @@
 
 namespace App\Entity;
 
-use App\Repository\ClimaRepository;
+use App\Repository\LocalidadRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ClimaRepository::class)]
-class Clima
+#[ORM\Entity(repositoryClass: LocalidadRepository::class)]
+class Localidad
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $descripcion = null;
+    #[ORM\Column(length: 255)]
+    private ?string $nombre = null;
 
     /**
      * @var Collection<int, Siniestro>
      */
-    #[ORM\OneToMany(targetEntity: Siniestro::class, mappedBy: 'clima')]
+    #[ORM\OneToMany(targetEntity: Siniestro::class, mappedBy: 'localidad')]
     private Collection $siniestros;
 
     public function __construct()
@@ -34,14 +34,14 @@ class Clima
         return $this->id;
     }
 
-    public function getDescripcion(): ?string
+    public function getNombre(): ?string
     {
-        return $this->descripcion;
+        return $this->nombre;
     }
 
-    public function setDescripcion(string $descripcion): static
+    public function setNombre(string $nombre): static
     {
-        $this->descripcion = $descripcion;
+        $this->nombre = $nombre;
 
         return $this;
     }
@@ -58,7 +58,7 @@ class Clima
     {
         if (!$this->siniestros->contains($siniestro)) {
             $this->siniestros->add($siniestro);
-            $siniestro->setClima($this);
+            $siniestro->setLocalidad($this);
         }
 
         return $this;
@@ -68,8 +68,8 @@ class Clima
     {
         if ($this->siniestros->removeElement($siniestro)) {
             // set the owning side to null (unless already changed)
-            if ($siniestro->getClima() === $this) {
-                $siniestro->setClima(null);
+            if ($siniestro->getLocalidad() === $this) {
+                $siniestro->setLocalidad(null);
             }
         }
 

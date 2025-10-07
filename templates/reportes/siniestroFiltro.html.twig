@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h2>Filtrar siniestros</h2>
+
+{{ form_start(form) }}
+    {{ form_row(form.fechaDesde) }}
+    {{ form_row(form.fechaHasta) }}
+    {{ form_row(form.localidad) }}
+    {{ form_row(form.clima) }}
+    {{ form_row(form.calle) }}
+    {{ form_row(form.altura) }}
+    <button type="submit" class="btn btn-primary">Buscar</button>
+{{ form_end(form) }}
+
+{% if resultados is defined %}
+    <h3>Resultados:</h3>
+    <ul>
+        {% for s in resultados %}
+            <li>{{ s.fecha|date('d/m/Y') }} - {{ s.localidad.nombre ?? 'Sin localidad' }} - {{ s.calle }} {{ s.altura }}</li>
+        {% else %}
+            <li>No se encontraron siniestros.</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+{% endblock %}

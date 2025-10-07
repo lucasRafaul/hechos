@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\ClimaRepository;
+use App\Repository\SexoRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ClimaRepository::class)]
-class Clima
+#[ORM\Entity(repositoryClass: SexoRepository::class)]
+class Sexo
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -19,14 +19,14 @@ class Clima
     private ?string $descripcion = null;
 
     /**
-     * @var Collection<int, Siniestro>
+     * @var Collection<int, Persona>
      */
-    #[ORM\OneToMany(targetEntity: Siniestro::class, mappedBy: 'clima')]
-    private Collection $siniestros;
+    #[ORM\OneToMany(targetEntity: Persona::class, mappedBy: 'genero')]
+    private Collection $personas;
 
     public function __construct()
     {
-        $this->siniestros = new ArrayCollection();
+        $this->personas = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -47,29 +47,29 @@ class Clima
     }
 
     /**
-     * @return Collection<int, Siniestro>
+     * @return Collection<int, Persona>
      */
-    public function getSiniestros(): Collection
+    public function getPersonas(): Collection
     {
-        return $this->siniestros;
+        return $this->personas;
     }
 
-    public function addSiniestro(Siniestro $siniestro): static
+    public function addPersona(Persona $persona): static
     {
-        if (!$this->siniestros->contains($siniestro)) {
-            $this->siniestros->add($siniestro);
-            $siniestro->setClima($this);
+        if (!$this->personas->contains($persona)) {
+            $this->personas->add($persona);
+            $persona->setGenero($this);
         }
 
         return $this;
     }
 
-    public function removeSiniestro(Siniestro $siniestro): static
+    public function removePersona(Persona $persona): static
     {
-        if ($this->siniestros->removeElement($siniestro)) {
+        if ($this->personas->removeElement($persona)) {
             // set the owning side to null (unless already changed)
-            if ($siniestro->getClima() === $this) {
-                $siniestro->setClima(null);
+            if ($persona->getGenero() === $this) {
+                $persona->setGenero(null);
             }
         }
 

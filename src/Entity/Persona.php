@@ -28,8 +28,8 @@ class Persona
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $fecha_nacimiento = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $genero = null;
+    ##[ORM\Column(length: 255)]
+    #private ?string $genero = null;
 
     #[ORM\Column(length: 255)]
     private ?string $estado_civil = null;
@@ -39,6 +39,10 @@ class Persona
      */
     #[ORM\OneToMany(mappedBy: 'persona', targetEntity: DetalleSiniestro::class, cascade: ['persist', 'remove'])]
     private Collection $detalleSiniestros;
+
+    #[ORM\ManyToOne(inversedBy: 'personas')]
+    private ?Sexo $genero = null;
+
 
     public function __construct()
     {
@@ -98,17 +102,17 @@ class Persona
         return $this;
     }
 
-    public function getGenero(): ?string
-    {
-        return $this->genero;
-    }
+    #public function getGenero(): ?string
+    #{
+        #return $this->genero;
+    #}
 
-    public function setGenero(string $genero): static
-    {
-        $this->genero = $genero;
+    #public function setGenero(string $genero): static
+    #{
+        #$this->genero = $genero;
 
-        return $this;
-    }
+        #return $this;
+    #}
 
     public function getEstadoCivil(): ?string
     {
@@ -150,4 +154,17 @@ class Persona
 
         return $this;
     }
+
+    public function getGenero(): ?Sexo
+    {
+        return $this->genero;
+    }
+
+    public function setGenero(?Sexo $genero): static
+    {
+        $this->genero = $genero;
+
+        return $this;
+    }
+
 }

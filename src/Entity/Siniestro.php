@@ -31,6 +31,18 @@ class Siniestro
     #[ORM\OneToMany(targetEntity: DetalleSiniestro::class, mappedBy: 'id_siniestro')]
     private Collection $detalleSiniestros;
 
+    #[ORM\ManyToOne(inversedBy: 'siniestros')]
+    private ?Localidad $localidad = null;
+
+    #[ORM\ManyToOne(inversedBy: 'siniestros')]
+    private ?Clima $clima = null;
+
+    #[ORM\Column(length: 150)]
+    private ?string $calle = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $altura = null;
+
     public function __construct()
     {
         $this->detalleSiniestros = new ArrayCollection();
@@ -103,6 +115,54 @@ class Siniestro
                 $detalleSiniestro->setIdSiniestro(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLocalidad(): ?Localidad
+    {
+        return $this->localidad;
+    }
+
+    public function setLocalidad(?Localidad $localidad): static
+    {
+        $this->localidad = $localidad;
+
+        return $this;
+    }
+
+    public function getClima(): ?Clima
+    {
+        return $this->clima;
+    }
+
+    public function setClima(?Clima $clima): static
+    {
+        $this->clima = $clima;
+
+        return $this;
+    }
+
+    public function getCalle(): ?string
+    {
+        return $this->calle;
+    }
+
+    public function setCalle(string $calle): static
+    {
+        $this->calle = $calle;
+
+        return $this;
+    }
+
+    public function getAltura(): ?string
+    {
+        return $this->altura;
+    }
+
+    public function setAltura(string $altura): static
+    {
+        $this->altura = $altura;
 
         return $this;
     }
