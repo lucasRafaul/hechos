@@ -22,6 +22,8 @@ class PersonaController extends AbstractController
     #[Route('/new', name: 'persona_new')]
     public function new(Request $request, ManagerRegistry $doctrine): Response
     {
+        // Bloquea el acceso si el usuario no tiene el rol ROLE_OPERATOR
+        ##$this->denyAccessUnlessGranted('ROLE_OPERATOR');
         $persona = new Persona();
         $form = $this->createForm(PersonaType::class, $persona);
         $form->handleRequest($request);

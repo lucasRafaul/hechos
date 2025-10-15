@@ -1,15 +1,49 @@
-<h2>{{ detalle ? 'Editar Detalle' : 'Nuevo Detalle' }}</h2>
+{{ form_start(form, {attr: {'id': 'detalle-form'}}) }}
 
-{{ form_start(form) }}
-    {{ form_row(form.id_siniestro) }}
-    {{ form_row(form.id_persona) }}
-    {{ form_row(form.rol) }}
-    {{ form_row(form.tipo_vehiculo) }}
-    {{ form_row(form.estadoAlcoholico) }}
-    {{ form_row(form.porcentajeAlcohol) }}
-    {{ form_row(form.observaciones) }}
-    <button type="submit" class="btn btn-primary">Guardar</button>
+<div id="detalle-container">
+    <div class="detalle-item">
+        {{ form_row(form.id_siniestro) }}
+        
+        <div class="persona-group" style="display: flex; align-items: center; gap: 8px;">
+            <div style="flex: 1;">
+                {{ form_row(form.id_persona) }}
+            </div>
+            <button type="button" class="btn btn-success add-detalle" title="Añadir otra persona">+</button>
+        </div>
+
+        {{ form_row(form.rol) }}
+        {{ form_row(form.tipo_vehiculo) }}
+        {{ form_row(form.estadoAlcoholico) }}
+        {{ form_row(form.porcentajeAlcohol) }}
+        {{ form_row(form.observaciones) }}
+    </div>
+</div>
+
+<button type="submit" class="btn btn-primary mt-3">Guardar</button>
+
 {{ form_end(form) }}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const container = document.getElementById('detalle-container');
+
+    container.addEventListener('click', function(e) {
+        if (e.target.classList.contains('add-detalle')) {
+            const detalleItem = e.target.closest('.detalle-item');
+            const newDetalle = detalleItem.cloneNode(true);
+
+            // Limpiar los valores de los inputs/selects
+            newDetalle.querySelectorAll('input, select, textarea').forEach(el => {
+                el.value = '';
+            });
+
+            // Insertar el nuevo bloque después del actual
+            container.appendChild(newDetalle);
+        }
+    });
+});
+</script>
+
 
 
 
