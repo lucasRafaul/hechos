@@ -2,7 +2,9 @@
 namespace App\Controller;
 
 use App\Entity\Siniestro;
+use App\Entity\DetalleSiniestro;
 use App\Form\SiniestroType;
+use App\Form\DetalleSiniestroType;
 use App\Form\filtro\SiniestroFiltroType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Dompdf\Dompdf;
@@ -24,24 +26,31 @@ class SiniestroController extends AbstractController
     }
 
     #[Route('/new', name: 'siniestro_new')]
-    public function new(Request $request, ManagerRegistry $doctrine): Response
-    {
-        $siniestro = new Siniestro();
-        $form = $this->createForm(SiniestroType::class, $siniestro);
-        $form->handleRequest($request);
+public function new(Request $request, ManagerRegistry $doctrine): Response
+{
+    $em = $doctrine->getManager();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $doctrine->getManager();
-            $em->persist($siniestro);
-            $em->flush();
-            return $this->redirectToRoute('siniestro_list');
+    $siniestro = new Siniestro();
+    $form = $this->createForm(SiniestroType::class, $siniestro);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        foreach ($siniestro->getDetalleSiniestros() as $detalle) {
+            $detalle->setIdSiniestro($siniestro);
+            $em->persist($detalle);
         }
 
-        return $this->render('siniestro/form.html.twig', [
-            'form' => $form->createView(),
-            'siniestro' => $siniestro,
-        ]);
+        $em->persist($siniestro);
+        $em->flush();
+
+        return $this->redirectToRoute('siniestro_list');
     }
+
+    return $this->render('siniestro/form.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
+
 
     #[Route('/show/{id}', name: 'siniestro_show')]
     public function show(int $id,ManagerRegistry $doctrine ): Response

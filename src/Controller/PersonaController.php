@@ -14,7 +14,9 @@ class PersonaController extends AbstractController
 {
     #[Route('/', name: 'persona_list')]
     public function list(ManagerRegistry $doctrine): Response
+    
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $personas = $doctrine->getRepository(Persona::class)->findAll();
         return $this->render('persona/listado.html.twig', ['personas' => $personas]);
     }
@@ -23,7 +25,7 @@ class PersonaController extends AbstractController
     public function new(Request $request, ManagerRegistry $doctrine): Response
     {
         // Bloquea el acceso si el usuario no tiene el rol ROLE_OPERATOR
-        ##$this->denyAccessUnlessGranted('ROLE_OPERATOR');
+        $this->denyAccessUnlessGranted('ROLE_OPERATOR');
         $persona = new Persona();
         $form = $this->createForm(PersonaType::class, $persona);
         $form->handleRequest($request);

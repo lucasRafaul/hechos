@@ -12,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
 #[Route('/detalle-siniestro')]
 class DetalleSiniestroController extends AbstractController
 {
-    #[Route('/list', name: 'detalle_list')]
+    #[Route('/', name: 'detalle_list')]
     public function list(ManagerRegistry $doctrine): Response
     {
         $detalles = $doctrine->getRepository(DetalleSiniestro::class)->findAll();

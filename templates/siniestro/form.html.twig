@@ -1,4 +1,5 @@
-<h2>{{ siniestro ? 'Editar Siniestro' : 'Nuevo Siniestro' }}</h2>
+<h2>Nuevo Siniestro</h2>
+
 {{ form_start(form) }}
     {{ form_row(form.fecha) }}
     {{ form_row(form.ubicacion) }}
@@ -6,13 +7,32 @@
     {{ form_row(form.clima) }}
     {{ form_row(form.calle) }}
     {{ form_row(form.altura) }}
-    <button class="btn btn-primary">Guardar</button>
+    {{ form_row(form.descripcion) }}
+
+    <h3>Detalles del Siniestro</h3>
+    <div data-prototype="{{ form_widget(form.detalleSiniestros.vars.prototype)|e('html_attr') }}">
+        {{ form_widget(form.detalleSiniestros) }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar Siniestro y Detalles</button>
 {{ form_end(form) }}
+<button type="button" id="add-detalle" class="btn btn-success">Agregar otro detalle</button>
 
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const container = document.querySelector('[data-prototype]');
+    const addButton = document.getElementById('add-detalle');
+    let index = container.children.length;
 
-
-
-
+    addButton.addEventListener('click', () => {
+        const prototype = container.dataset.prototype.replace(/__name__/g, index);
+        const newForm = document.createElement('div');
+        newForm.innerHTML = prototype;
+        container.appendChild(newForm);
+        index++;
+    });
+});
+</script>
 
 
 
