@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Siniestro;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+#use DoctrineExtensions\Query\Mysql;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -40,4 +41,24 @@ class SiniestroRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
-}
+        public function reporteSiniestrosPorMes(array $filtros): array
+        {
+            $qb = $this->createQueryBuilder('s')
+            ->select("CONCAT(YEAR(s.fecha), '-', MONTH(s.fecha)) AS periodo, COUNT(s.id) AS cantidad")
+            ->groupBy('periodo')
+            ->orderBy('periodo', 'ASC');
+
+            if (!empty($filtros['fechaDesde'])) {
+                $qb->andWhere('s.fecha >= :desde')
+                ->setParameter('desde', $filtros['fechaDesde']);
+            }
+
+            if (!empty($filtros['fechaHasta'])) {
+                $qb->andWhere('s.fecha <= :hasta')
+                ->setParameter('hasta', $filtros['fechaHasta']);
+            }
+
+            return $qb->getQuery()->getResult();
+        }
+
+        }

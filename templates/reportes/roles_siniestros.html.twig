@@ -1,0 +1,33 @@
+{{ form_start(form, {'attr': {'data-turbo': 'false'}}) }}
+<div class="row mb-3">
+    <div class="col-md-3">{{ form_row(form.fechaDesde) }}</div>
+    <div class="col-md-3">{{ form_row(form.fechaHasta) }}</div>
+    <div class="col-md-2">
+        <button class="btn btn-primary mt-4">Filtrar</button>
+    </div>
+</div>
+{{ form_end(form) }}
+
+{% if roles is not empty %}
+    <canvas id="rolesChart"></canvas>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const data = {{ roles|json_encode|raw }};
+        const labels = data.map(r => r.rol);
+        const values = data.map(r => r.cantidad);
+
+        new Chart(document.getElementById('rolesChart'), {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Distribución de roles',
+                    data: values,
+                }]
+            }
+        });
+    </script>
+{% else %}
+    <p>No hay datos para los filtros seleccionados.</p>
+{% endif %}

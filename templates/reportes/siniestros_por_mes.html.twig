@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reporte de Siniestros por Mes/Año{% endblock %}
+
+{% block body %}
+<h1 class="mb-3">Reporte: Cantidad de siniestros por mes/año</h1>
+
+{{ form_start(form, {'attr': {'data-turbo': 'false'}}) }}
+<div class="row mb-3">
+    <div class="col-md-3">{{ form_row(form.fechaDesde) }}</div>
+    <div class="col-md-3">{{ form_row(form.fechaHasta) }}</div>
+    <div class="col-md-2">
+        <button class="btn btn-primary mt-4">Filtrar</button>
+    </div>
+    <div class="text-end mb-3">
+    <a href="{{ path('reporte_roles_siniestros') }}" class="btn btn-secondary">
+        Ver distribución de roles
+    </a>
+</div>
+</div>
+{{ form_end(form) }}
+
+{% if datos is not empty %}
+    <canvas id="chart"></canvas>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const rawData = {{ datos|json_encode|raw }};
+        const labels = rawData.map(d => d.periodo);
+        const values = rawData.map(d => d.cantidad);
+
+        new Chart(document.getElementById('chart'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Cantidad de siniestros',
+                    data: values,
+                }]
+            },
+            options: {
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
+{% else %}
+    <p>No hay datos para el rango seleccionado.</p>
+{% endif %}
+{% endblock %}

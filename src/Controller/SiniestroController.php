@@ -4,6 +4,8 @@ namespace App\Controller;
 use App\Entity\Siniestro;
 use App\Entity\DetalleSiniestro;
 use App\Form\SiniestroType;
+use App\Repository\SiniestroRepository;
+use App\Repository\DetalleSiniestroRepository;
 use App\Form\DetalleSiniestroType;
 use App\Form\filtro\SiniestroFiltroType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -58,6 +60,45 @@ public function new(Request $request, ManagerRegistry $doctrine): Response
         $siniestro = $doctrine->getRepository(Siniestro::class)->find($id);
         return $this->render('siniestro/show.html.twig', ['siniestro' => $siniestro]);
     }
+
+    #[Route('/siniestros-mes', name: 'reporte_siniestros_mes')]
+    public function siniestrosPorMes(Request $request, SiniestroRepository $repo): Response
+    {
+        $form = $this->createForm(SiniestroFiltroType::class);
+        $form->handleRequest($request);
+
+        $datos = [];
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $filtros = $form->getData();
+            $datos = $repo->reporteSiniestrosPorMes($filtros);
+        }
+
+        return $this->render('reportes/siniestros_por_mes.html.twig', [
+            'form' => $form->createView(),
+            'datos' => $datos,
+        ]);
+    }
+
+    #[Route('/siniestros-roles', name: 'reporte_roles_siniestros')]
+    public function rolesPorSiniestro(Request $request, SiniestroRepository $repoSiniestro, DetalleSiniestroRepository $repoDetalle): Response
+    {
+        $form = $this->createForm(SiniestroFiltroType::class);
+        $form->handleRequest($request);
+
+        $roles = [];
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $filtros = $form->getData();
+            $roles = $repoDetalle->reporteRolesPorSiniestros($filtros);
+        }
+
+        return $this->render('reportes/roles_siniestros.html.twig', [
+            'form' => $form->createView(),
+            'roles' => $roles,
+        ]);
+    }
+
 
     #[Route('/filtros', name: 'siniestro_filtros')]
     public function filtros(Request $request, EntityManagerInterface $em): Response

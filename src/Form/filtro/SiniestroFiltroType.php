@@ -19,30 +19,12 @@ class SiniestroFiltroType extends AbstractType
             ->add('fechaDesde', DateType::class, [
                 'widget' => 'single_text',
                 'required' => false,
-                'label' => 'Fecha desde',
+                'label' => 'Desde',
             ])
             ->add('fechaHasta', DateType::class, [
                 'widget' => 'single_text',
                 'required' => false,
-                'label' => 'Fecha hasta',
-            ])
-            ->add('localidad', EntityType::class, [
-                'class' => Localidad::class,
-                'choice_label' => 'nombre',
-                'required' => false,
-                'placeholder' => 'Todas las localidades',
-            ])
-            ->add('clima', EntityType::class, [
-                'class' => Clima::class,
-                'choice_label' => 'descripcion',
-                'required' => false,
-                'placeholder' => 'Cualquier clima',
-            ])
-            ->add('calle', TextType::class, [
-                'required' => false,
-            ])
-            ->add('altura', TextType::class, [
-                'required' => false,
+                'label' => 'Hasta',
             ]);
     }
 

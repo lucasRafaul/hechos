@@ -16,6 +16,7 @@ class PersonaController extends AbstractController
     public function list(ManagerRegistry $doctrine): Response
     
     {
+            
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $personas = $doctrine->getRepository(Persona::class)->findAll();
         return $this->render('persona/listado.html.twig', ['personas' => $personas]);
