@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nueva Localidad{% endblock %}
+
+{% block body %}
+<div class="card shadow-sm p-4">
+    <h2 class="text-primary mb-3">Crear nueva Localidad</h2>
+
+    {{ include('localidad/_form.html.twig') }}
+
+    <div class="mt-3">
+        <a href="{{ path('app_localidad_index') }}" class="btn btn-outline-secondary">← Volver al listado</a>
+    </div>
+</div>
+{% endblock %}

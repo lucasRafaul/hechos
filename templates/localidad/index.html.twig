@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listado de Localidades{% endblock %}
+
+{% block body %}
+<div class="card shadow-sm p-4">
+    <h2 class="text-primary mb-3">Listado de Localidades</h2>
+
+    <table class="table table-striped table-hover">
+        <thead class="table-primary">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for localidad in localidads %}
+                <tr>
+                    <td>{{ localidad.id }}</td>
+                    <td>{{ localidad.nombre }}</td>
+                    <td>
+                        <a href="{{ path('app_localidad_show', {'id': localidad.id}) }}" class="btn btn-sm btn-info text-white">Ver</a>
+                        <a href="{{ path('app_localidad_edit', {'id': localidad.id}) }}" class="btn btn-sm btn-warning text-white">Editar</a>
+                        <form method="post" action="{{ path('app_localidad_delete', {'id': localidad.id}) }}" style="display:inline;" onsubmit="return confirm('¿Seguro que quieres eliminar esta localidad?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ localidad.id) }}">
+                            <button class="btn btn-sm btn-danger">🗑️ Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3" class="text-center text-muted">No hay localidades registradas.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_localidad_new') }}" class="btn btn-success">➕ Nueva Localidad</a>
+</div>
+{% endblock %}

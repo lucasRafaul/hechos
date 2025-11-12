@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nuevo Tipo de Vehículo{% endblock %}
+
+{% block body %}
+<div class="card shadow-sm p-4">
+    <h2 class="text-primary mb-3">Crear nuevo Tipo de Vehículo</h2>
+
+    {{ include('tipo_vehiculo/_form.html.twig') }}
+
+    <div class="mt-3">
+        <a href="{{ path('app_tipo_vehiculo_index') }}" class="btn btn-outline-secondary">← Volver al listado</a>
+    </div>
+</div>
+{% endblock %}

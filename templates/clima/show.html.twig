@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Clima{% endblock %}
+
+{% block body %}
+    <h1>Clima</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ clima.id }}</td>
+            </tr>
+            <tr>
+                <th>Descripcion</th>
+                <td>{{ clima.descripcion }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_clima_index') }}">back to list</a>
+
+    <a href="{{ path('app_clima_edit', {'id': clima.id}) }}">edit</a>
+
+    {{ include('clima/_delete_form.html.twig') }}
+{% endblock %}

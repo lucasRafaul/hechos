@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listado de Climas{% endblock %}
+
+{% block body %}
+<div class="card shadow-sm p-4">
+    <h2 class="text-primary mb-3">Listado de Climas</h2>
+
+    <table class="table table-striped table-hover">
+        <thead class="table-primary">
+            <tr>
+                <th>ID</th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for clima in climas %}
+                <tr>
+                    <td>{{ clima.id }}</td>
+                    <td>{{ clima.descripcion }}</td>
+                    <td>
+                        <a href="{{ path('app_clima_show', {'id': clima.id}) }}" class="btn btn-sm btn-info text-white">Ver</a>
+                        <a href="{{ path('app_clima_edit', {'id': clima.id}) }}" class="btn btn-sm btn-warning text-white">Editar</a>
+                        <form method="post" action="{{ path('app_clima_delete', {'id': clima.id}) }}" style="display:inline;" onsubmit="return confirm('¿Seguro que quieres eliminar este clima?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ clima.id) }}">
+                            <button class="btn btn-sm btn-danger">🗑️ Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3" class="text-center text-muted">No hay climas registrados.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_clima_new') }}" class="btn btn-success">➕ Nuevo Clima</a>
+</div>
+{% endblock %}
