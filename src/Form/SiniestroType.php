@@ -24,7 +24,6 @@ class SiniestroType extends AbstractType
                 'class' => Localidad::class,
                 'choice_label' => 'nombre'
             ])
-            ->add('ubicacion', TextType::class)
             ->add('calle', TextType::class)
             ->add('altura', TextType::class)
             ->add('descripcion', TextareaType::class)

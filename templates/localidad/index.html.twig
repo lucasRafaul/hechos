@@ -24,7 +24,7 @@
                         <a href="{{ path('app_localidad_edit', {'id': localidad.id}) }}" class="btn btn-sm btn-warning text-white">Editar</a>
                         <form method="post" action="{{ path('app_localidad_delete', {'id': localidad.id}) }}" style="display:inline;" onsubmit="return confirm('¿Seguro que quieres eliminar esta localidad?');">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ localidad.id) }}">
-                            <button class="btn btn-sm btn-danger">🗑️ Eliminar</button>
+                            <button class="btn btn-sm btn-danger"> Eliminar</button>
                         </form>
                     </td>
                 </tr>
@@ -36,6 +36,6 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_localidad_new') }}" class="btn btn-success">➕ Nueva Localidad</a>
+    <a href="{{ path('app_localidad_new') }}" class="btn btn-success">+ Nueva Localidad</a>
 </div>
 {% endblock %}

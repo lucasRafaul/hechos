@@ -11,7 +11,6 @@
             <tr>
                 <th>ID</th>
                 <th>Fecha</th>
-                <th>Ubicación</th>
                 <th>Localidad</th>
                 <th>Clima</th>
                 <th>Descripción</th>
@@ -23,7 +22,6 @@
                 <tr>
                     <td>{{ s.id }}</td>
                     <td>{{ s.fecha|date('Y-m-d') }}</td>
-                    <td>{{ s.ubicacion }}</td>
                     <td>{{ s.localidad ? s.localidad.nombre : 'Sin localidad' }}</td>
                     <td>{{ s.clima ? s.clima.descripcion : 'Sin clima' }}</td>
                     <td>{{ s.descripcion }}</td>
@@ -34,7 +32,7 @@
                     {% if is_granted('ROLE_ADMIN') %}
                         <form method="post" action="{{ path('siniestro_delete', {'id': s.id}) }}" style="display:inline;" onsubmit="return confirm('¿Seguro que quieres eliminar este siniestro?');">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ s.id) }}">
-                            <button class="btn btn-sm btn-danger">🗑️ Eliminar</button>
+                            <button class="btn btn-sm btn-danger">Eliminar</button>
                         </form>
                     {% endif %}
                 </td>
@@ -48,6 +46,6 @@
         </tbody>
     </table>
 
-    <a href="{{ path('siniestro_new') }}" class="btn btn-success">➕ Nuevo siniestro</a>
+    <a href="{{ path('siniestro_new') }}" class="btn btn-success">+ Nuevo siniestro</a>
 </div>
 {% endblock %}

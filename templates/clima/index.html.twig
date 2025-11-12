@@ -24,7 +24,7 @@
                         <a href="{{ path('app_clima_edit', {'id': clima.id}) }}" class="btn btn-sm btn-warning text-white">Editar</a>
                         <form method="post" action="{{ path('app_clima_delete', {'id': clima.id}) }}" style="display:inline;" onsubmit="return confirm('¿Seguro que quieres eliminar este clima?');">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ clima.id) }}">
-                            <button class="btn btn-sm btn-danger">🗑️ Eliminar</button>
+                            <button class="btn btn-sm btn-danger"> Eliminar</button>
                         </form>
                     </td>
                 </tr>
@@ -36,6 +36,6 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_clima_new') }}" class="btn btn-success">➕ Nuevo Clima</a>
+    <a href="{{ path('app_clima_new') }}" class="btn btn-success">+ Nuevo Clima</a>
 </div>
 {% endblock %}

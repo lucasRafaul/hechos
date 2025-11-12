@@ -5,7 +5,7 @@
 {% block body %}
 <div class="card shadow-sm p-4">
     <h2 class="text-primary mb-4">
-        {{ persona ? '✏️ Editar Persona' : '➕ Nueva Persona' }}
+        {{ persona ? '✏️ Editar Persona' : '+ Nueva Persona' }}
     </h2>
 
     {{ form_start(form) }}
@@ -26,11 +26,11 @@
 
         {% if is_granted('ROLE_ADMIN') %}
         <button type="submit" class="btn btn-primary">
-            💾 Guardar
+             Guardar
         </button>
         {% endif %}
         <a href="{{ path('persona_list') }}" class="btn btn-outline-secondary">
-            ← Volver
+             Volver
         </a>
     </div>
     {{ form_end(form) }}

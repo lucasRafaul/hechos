@@ -20,9 +20,6 @@ class Siniestro
     private ?\DateTime $fecha = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $ubicacion = null;
-
-    #[ORM\Column(length: 255)]
     private ?string $descripcion = null;
 
     /**
@@ -65,17 +62,6 @@ class Siniestro
         return $this;
     }
 
-    public function getUbicacion(): ?string
-    {
-        return $this->ubicacion;
-    }
-
-    public function setUbicacion(string $ubicacion): static
-    {
-        $this->ubicacion = $ubicacion;
-
-        return $this;
-    }
 
     public function getDescripcion(): ?string
     {
