@@ -40,8 +40,8 @@ class DetalleSiniestroType extends AbstractType
                 'class' => TipoVehiculo::class,
                 'choice_label' => 'descripcion' 
             ])
-            ->add('estadoAlcoholico', TextType::class)
-            ->add('porcentajeAlcohol', NumberType::class, ['required' => false])
+            ->add('estadoAlcoholico', ChoiceType::class,['choices'=>['Positivo' => 'Positivo','Negativo' => 'Negativo','No Testeado' => 'No Testeado'],'placeholder'=>'Seleccione un estado'])
+            ->add('porcentajeAlcohol', NumberType::class, ['required' => false, 'label' => 'Porcentaje de alcohol'])
             ->add('observaciones', TextareaType::class, ['required' => false]);
     }
 

@@ -4,12 +4,16 @@ namespace App\Controller;
 use App\Entity\Siniestro;
 use App\Entity\DetalleSiniestro;
 use App\Form\SiniestroType;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use App\Repository\SiniestroRepository;
 use App\Repository\DetalleSiniestroRepository;
 use App\Form\DetalleSiniestroType;
 use App\Form\filtro\SiniestroFiltroType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Dompdf\Dompdf;
+use DateTime; 
 use Dompdf\Options;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
@@ -61,6 +65,26 @@ public function new(Request $request, ManagerRegistry $doctrine): Response
         return $this->render('siniestro/show.html.twig', ['siniestro' => $siniestro]);
     }
 
+    #[Route('/delete/{id}', name: 'siniestro_delete', methods: ['POST'])]
+    public function delete(int $id, ManagerRegistry $doctrine, Request $request): Response
+    {
+        $em = $doctrine->getManager();
+        $siniestro = $em->getRepository(Siniestro::class)->find($id);
+
+        if (!$siniestro) {
+            throw $this->createNotFoundException('Siniestro no encontrado.');
+        }
+
+        // Protección CSRF
+        if ($this->isCsrfTokenValid('delete'.$siniestro->getId(), $request->request->get('_token'))) {
+            $em->remove($siniestro);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('siniestro_list');
+    }
+
+
     #[Route('/siniestros-mes', name: 'reporte_siniestros_mes')]
     public function siniestrosPorMes(Request $request, SiniestroRepository $repo): Response
     {
@@ -79,6 +103,44 @@ public function new(Request $request, ManagerRegistry $doctrine): Response
             'datos' => $datos,
         ]);
     }
+
+    #[Route('/reporte/siniestros-mes/excel', name: 'reporte_siniestros_mes_excel')]
+    public function exportarSiniestrosMesExcel(SiniestroRepository $repo, Request $request): Response
+    {
+        $filtros = $request->query->all();
+        $datos = $repo->reporteSiniestrosPorMes($filtros);
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Siniestros por Mes');
+
+        // Encabezados
+        $sheet->setCellValue('A1', 'Período (Año-Mes)');
+        $sheet->setCellValue('B1', 'Cantidad de Siniestros');
+
+        // Datos
+        $fila = 2;
+        foreach ($datos as $row) {
+            [$anio, $mes] = explode('-', $row['periodo']);
+            $nombreMes = DateTime::createFromFormat('!m', $mes)->format('F');
+            $sheet->setCellValue("A{$fila}", "{$anio} - {$nombreMes}");
+            $sheet->setCellValue("B{$fila}", $row['cantidad']);
+            $fila++;
+        }
+
+        $writer = new Xlsx($spreadsheet);
+
+        $response = new StreamedResponse(function() use ($writer) {
+            $writer->save('php://output');
+        });
+
+        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $response->headers->set('Content-Disposition', 'attachment;filename="siniestros_por_mes.xlsx"');
+        $response->headers->set('Cache-Control', 'max-age=0');
+
+        return $response;
+    }
+
 
     #[Route('/siniestros-roles', name: 'reporte_roles_siniestros')]
     public function rolesPorSiniestro(Request $request, SiniestroRepository $repoSiniestro, DetalleSiniestroRepository $repoDetalle): Response

@@ -1,17 +1,41 @@
-<h2>{{ persona ? 'Editar Persona' : 'Nueva Persona' }}</h2>
+{% extends 'base.html.twig' %}
 
+{% block title %}{{ persona ? 'Editar Persona' : 'Nueva Persona' }}{% endblock %}
 
-{{ form_start(form) }}
-    {{ form_row(form.nombre) }}
-    {{ form_row(form.apellido) }}
-    {{ form_row(form.dni) }}
-    {{ form_row(form.fechaNacimiento) }}
-    {{ form_row(form.genero) }}
-    {{ form_row(form.estadoCivil) }}
-    <button type="submit" class="btn btn-primary">Guardar</button>
-{{ form_end(form) }}
+{% block body %}
+<div class="card shadow-sm p-4">
+    <h2 class="text-primary mb-4">
+        {{ persona ? '✏️ Editar Persona' : '➕ Nueva Persona' }}
+    </h2>
 
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_row(form.nombre) }}
+            {{ form_row(form.apellido) }}
+            {{ form_row(form.dni) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_row(form.fechaNacimiento) }}
+            {{ form_row(form.genero) }}
+            {{ form_row(form.estadoCivil) }}
+        </div>
+    </div>
 
+    <div class="mt-3">
+
+        {% if is_granted('ROLE_ADMIN') %}
+        <button type="submit" class="btn btn-primary">
+            💾 Guardar
+        </button>
+        {% endif %}
+        <a href="{{ path('persona_list') }}" class="btn btn-outline-secondary">
+            ← Volver
+        </a>
+    </div>
+    {{ form_end(form) }}
+</div>
+{% endblock %}
 
 
 

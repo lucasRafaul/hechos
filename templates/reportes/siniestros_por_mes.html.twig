@@ -45,6 +45,10 @@
             <button id="btnChart" class="btn btn-info text-white px-4">
                 📊 Mostrar gráfico
             </button>
+            <a href="{{ path('reporte_siniestros_mes_excel', app.request.query.all) }}" class="btn btn-success mt-3">
+                Exportar a Excel
+            </a>
+
         </div>
 
         <div class="mt-4 text-center">

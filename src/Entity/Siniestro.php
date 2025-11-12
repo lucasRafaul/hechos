@@ -28,7 +28,7 @@ class Siniestro
     /**
      * @var Collection<int, DetalleSiniestro>
      */
-    #[ORM\OneToMany(targetEntity: DetalleSiniestro::class, mappedBy: 'id_siniestro')]
+    #[ORM\OneToMany(targetEntity: DetalleSiniestro::class, mappedBy: 'id_siniestro',cascade: ['persist', 'remove'])]
     private Collection $detalleSiniestros;
 
     #[ORM\ManyToOne(inversedBy: 'siniestros')]

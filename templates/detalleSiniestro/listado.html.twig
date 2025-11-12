@@ -1,38 +1,69 @@
-<h2>Listado de Detalles de Siniestro</h2>
+{% extends 'base.html.twig' %}
 
-<a href="{{ path('detalle_new') }}" class="btn btn-primary">Nuevo Detalle</a>
+{% block title %}Listado de Detalles de Siniestro{% endblock %}
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Siniestro</th>
-            <th>Persona</th>
-            <th>Rol</th>
-            <th>Estado Alcoholico</th>
-            <th>% Alcohol</th>
-            <th>Observaciones</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for d in detalles %}
-        <tr>
-            <td>{{ d.id }}</td>
-            {#function($persona) { return $persona->getNombre().' '.$persona->getApellido()#}
-            <td>{{ d.idSiniestro.ubicacion() }} - {{ d.idSiniestro.fecha|date('Y-m-d H:i') }}</td>
-            <td>{{ d.idPersona.nombre }} {{ d.idPersona.apellido }}</td>
-            <td>{{ d.rol ? d.rol.descripcion : 'Sin rol' }}</td>
-            <td>{{ d.estadoAlcoholico }}</td>
-            <td>{{ d.porcentajeAlcohol }}</td>
-            <td>{{ d.observaciones }}</td>
-            <td>
-                <a href="{{ path('detalle_show', {'id': d.id}) }}">Ver</a>
-            </td>
-        </tr>
-    {% else %}
-        <tr><td colspan="8">No hay detalles registrados</td></tr>
-    {% endfor %}
-    </tbody>
-</table>
+{% block body %}
+<div class="card shadow-sm p-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-primary mb-0">📋 Listado de Detalles de Siniestro</h2>
+        <a href="{{ path('detalle_new') }}" class="btn btn-success">
+            ➕ Nuevo Detalle
+        </a>
+    </div>
 
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Siniestro</th>
+                    <th>Persona</th>
+                    <th>Rol</th>
+                    <th>Estado Alcohólico</th>
+                    <th>% Alcohol</th>
+                    <th>Observaciones</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for d in detalles %}
+                <tr>
+                    <td><span class="badge bg-secondary">{{ d.id }}</span></td>
+                    <td>{{ d.idSiniestro.ubicacion() }} - {{ d.idSiniestro.fecha|date('Y-m-d H:i') }}</td>
+                    <td>{{ d.idPersona.nombre }} {{ d.idPersona.apellido }}</td>
+                    <td>{{ d.rol ? d.rol.descripcion : 'Sin rol' }}</td>
+                    <td>
+                        {% if d.estadoAlcoholico == 'Positivo' %}
+                            <span class="badge bg-danger">Positivo</span>
+                        {% elseif d.estadoAlcoholico == 'Negativo' %}
+                            <span class="badge bg-success">Negativo</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ d.estadoAlcoholico }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ d.porcentajeAlcohol ?? '-' }}</td>
+                    <td>{{ d.observaciones ?: '-' }}</td>
+                    <td class="text-center">
+                        <a href="{{ path('detalle_show', {'id': d.id}) }}" class="btn btn-sm btn-outline-primary">
+                            Ver
+                        </a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <form method="post" action="{{ path('detalle_delete', {'id': d.id}) }}" style="display:inline;" onsubmit="return confirm('¿Seguro que quieres eliminar este detalle?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ d.id) }}">
+                            <button class="btn btn-sm btn-danger">🗑️</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="8" class="text-center text-muted py-3">
+                        No hay detalles registrados.
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

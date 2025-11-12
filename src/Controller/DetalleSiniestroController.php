@@ -53,6 +53,25 @@ class DetalleSiniestroController extends AbstractController
         ]);
     }
 
+    #[Route('/delete/{id}', name: 'detalle_delete', methods: ['POST'])]
+    public function delete(int $id, ManagerRegistry $doctrine, Request $request): Response
+    {
+        $em = $doctrine->getManager();
+        $detalle = $em->getRepository(DetalleSiniestro::class)->find($id);
+
+        if (!$detalle) {
+            throw $this->createNotFoundException('Detalle no encontrado');
+        }
+
+        if ($this->isCsrfTokenValid('delete'.$detalle->getId(), $request->request->get('_token'))) {
+            $em->remove($detalle);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('detalle_list');
+    }
+
+
 
     
 }

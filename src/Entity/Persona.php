@@ -37,7 +37,7 @@ class Persona
     /**
      * @var Collection<int, DetalleSiniestro>
      */
-    #[ORM\OneToMany(mappedBy: 'persona', targetEntity: DetalleSiniestro::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'id_persona', targetEntity: DetalleSiniestro::class, cascade: ['persist', 'remove'])]
     private Collection $detalleSiniestros;
 
     #[ORM\ManyToOne(inversedBy: 'personas')]

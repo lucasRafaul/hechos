@@ -30,6 +30,15 @@
                     <td>
                         <a href="{{ path('siniestro_show', {'id': s.id}) }}" class="btn btn-sm btn-info text-white">Ver</a>
                     </td>
+                    <td>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <form method="post" action="{{ path('siniestro_delete', {'id': s.id}) }}" style="display:inline;" onsubmit="return confirm('¿Seguro que quieres eliminar este siniestro?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ s.id) }}">
+                            <button class="btn btn-sm btn-danger">🗑️ Eliminar</button>
+                        </form>
+                    {% endif %}
+                </td>
+
                 </tr>
             {% else %}
                 <tr>

@@ -17,7 +17,7 @@ class PersonaController extends AbstractController
     
     {
             
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        //$this->denyAccessUnlessGranted('ROLE_ADMIN');
         $personas = $doctrine->getRepository(Persona::class)->findAll();
         return $this->render('persona/listado.html.twig', ['personas' => $personas]);
     }
@@ -26,7 +26,7 @@ class PersonaController extends AbstractController
     public function new(Request $request, ManagerRegistry $doctrine): Response
     {
         // Bloquea el acceso si el usuario no tiene el rol ROLE_OPERATOR
-        $this->denyAccessUnlessGranted('ROLE_OPERATOR');
+        //$this->denyAccessUnlessGranted('ROLE_OPERATOR');
         $persona = new Persona();
         $form = $this->createForm(PersonaType::class, $persona);
         $form->handleRequest($request);
@@ -54,4 +54,25 @@ class PersonaController extends AbstractController
 
         return $this->render('persona/form.html.twig', ['form' => $form->createView()]);
     }
+
+    #[Route('/delete/{id}', name: 'persona_delete', methods: ['POST'])]
+    public function delete(int $id, ManagerRegistry $doctrine, Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN'); 
+
+        $em = $doctrine->getManager();
+        $persona = $em->getRepository(Persona::class)->find($id);
+        
+        if (!$persona) {
+            throw $this->createNotFoundException('Persona no encontrada.');
+        }
+
+        if ($this->isCsrfTokenValid('delete'.$persona->getId(), $request->request->get('_token'))) {
+            $em->remove($persona);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('persona_list');
+    }
+
 }

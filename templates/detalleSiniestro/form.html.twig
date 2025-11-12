@@ -1,50 +1,73 @@
-{{ form_start(form, {attr: {'id': 'detalle-form'}}) }}
+{% extends 'base.html.twig' %}
 
-<div id="detalle-container">
-    <div class="detalle-item">
-        {{ form_row(form.id_siniestro) }}
-        
-        <div class="persona-group" style="display: flex; align-items: center; gap: 8px;">
-            <div style="flex: 1;">
-                {{ form_row(form.id_persona) }}
+{% block title %}Nuevo Detalle de Siniestro{% endblock %}
+
+{% block body %}
+<div class="card shadow-sm p-4">
+    <h2 class="text-primary mb-4">Registrar Detalle de Siniestro</h2>
+
+    {{ form_start(form, {attr: {'id': 'detalle-form'}}) }}
+    <div id="detalle-container">
+        <div class="detalle-item border rounded p-3 mb-3 bg-light">
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(form.id_siniestro) }}
+                    {{ form_row(form.id_persona) }}
+                    {{ form_row(form.rol) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.tipo_vehiculo) }}
+                    {{ form_row(form.estadoAlcoholico) }}
+                    {{ form_row(form.porcentajeAlcohol) }}
+                    {{ form_row(form.observaciones) }}
+                </div>
             </div>
-            <button type="button" class="btn btn-success add-detalle" title="Añadir otra persona">+</button>
+            <div class="text-end mt-2">
+                <button type="button" class="btn btn-success add-detalle">
+                    ➕ Añadir otro detalle
+                </button>
+            </div>
         </div>
-
-        {{ form_row(form.rol) }}
-        {{ form_row(form.tipo_vehiculo) }}
-        {{ form_row(form.estadoAlcoholico) }}
-        {{ form_row(form.porcentajeAlcohol) }}
-        {{ form_row(form.observaciones) }}
     </div>
+
+    <button type="submit" class="btn btn-primary mt-3">💾 Guardar</button>
+    {{ form_end(form) }}
 </div>
 
-<button type="submit" class="btn btn-primary mt-3">Guardar</button>
-
-{{ form_end(form) }}
-
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('detalle-container');
 
-    container.addEventListener('click', function(e) {
+    container.addEventListener('click', (e) => {
         if (e.target.classList.contains('add-detalle')) {
-            const detalleItem = e.target.closest('.detalle-item');
-            const newDetalle = detalleItem.cloneNode(true);
+            const item = e.target.closest('.detalle-item');
+            const clone = item.cloneNode(true);
 
-            // Limpiar los valores de los inputs/selects
-            newDetalle.querySelectorAll('input, select, textarea').forEach(el => {
-                el.value = '';
-            });
+            // limpiar valores
+            clone.querySelectorAll('input, select, textarea').forEach(el => el.value = '');
 
-            // Insertar el nuevo bloque después del actual
-            container.appendChild(newDetalle);
+            container.appendChild(clone);
         }
+    });
+
+    // Mostrar/ocultar campo porcentaje según estado alcohólico
+    const togglePorcentaje = (select) => {
+        const porcentajeDiv = select.closest('.detalle-item').querySelector('[id$="_porcentajeAlcohol"]').closest('.form-group, div');
+        if (select.value === 'Positivo') {
+            porcentajeDiv.style.display = 'block';
+        } else {
+            porcentajeDiv.style.display = 'none';
+            porcentajeDiv.querySelector('input').value = 0;
+        }
+    };
+
+    document.querySelectorAll('[id$="_estadoAlcoholico"]').forEach(select => {
+        select.addEventListener('change', () => togglePorcentaje(select));
+        togglePorcentaje(select);
     });
 });
 </script>
-
-
+{% endblock %}
 
 
 
