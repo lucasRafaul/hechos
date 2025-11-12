@@ -70,4 +70,74 @@ class DetalleSiniestroRepository extends ServiceEntityRepository
             return $result->fetchAllAssociative();
         }
 
+        public function reporteEstadoAlcoholico(array $filtros): array
+        {
+            $qb = $this->createQueryBuilder('d')
+                ->select('d.estado_alcoholico AS estado, COUNT(d.id) AS cantidad')
+                ->join('d.id_siniestro', 's')
+                ->groupBy('d.estado_alcoholico')
+                ->orderBy('cantidad', 'DESC');
+
+            if (!empty($filtros['fechaDesde'])) {
+                $qb->andWhere('s.fecha >= :desde')
+                ->setParameter('desde', $filtros['fechaDesde']);
+            }
+
+            if (!empty($filtros['fechaHasta'])) {
+                $qb->andWhere('s.fecha <= :hasta')
+                ->setParameter('hasta', $filtros['fechaHasta']);
+            }
+
+            return $qb->getQuery()->getResult();
+        }
+
+
+        public function reporteTipoVehiculo(array $filtros): array
+        {
+            $qb = $this->createQueryBuilder('d')
+                ->select('tv.descripcion AS tipo, COUNT(d.id) AS cantidad')
+                ->join('d.tipoVehiculo', 'tv')
+                ->join('d.id_siniestro', 's')
+                ->groupBy('tv.descripcion')
+                ->orderBy('cantidad', 'DESC');
+
+            if (!empty($filtros['fechaDesde'])) {
+                $qb->andWhere('s.fecha >= :desde')
+                ->setParameter('desde', $filtros['fechaDesde']);
+            }
+
+            if (!empty($filtros['fechaHasta'])) {
+                $qb->andWhere('s.fecha <= :hasta')
+                ->setParameter('hasta', $filtros['fechaHasta']);
+            }
+
+            return $qb->getQuery()->getResult();
+        }
+
+        public function reportePorSexo(array $filtros): array
+        {
+            $qb = $this->createQueryBuilder('d')
+                ->select('sx.descripcion AS sexo, COUNT(d.id) AS cantidad')
+                ->join('d.id_persona', 'p')
+                ->join('p.genero', 'sx')
+                ->join('d.id_siniestro ', 's')
+                ->groupBy('sx.descripcion')
+                ->orderBy('cantidad', 'DESC');
+
+            if (!empty($filtros['fechaDesde'])) {
+                $qb->andWhere('s.fecha >= :desde')
+                ->setParameter('desde', $filtros['fechaDesde']);
+            }
+
+            if (!empty($filtros['fechaHasta'])) {
+                $qb->andWhere('s.fecha <= :hasta')
+                ->setParameter('hasta', $filtros['fechaHasta']);
+            }
+
+            return $qb->getQuery()->getResult();
+        }
+
+
+
+
 }

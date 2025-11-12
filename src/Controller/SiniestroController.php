@@ -95,9 +95,76 @@ public function new(Request $request, ManagerRegistry $doctrine): Response
 
         return $this->render('reportes/roles_siniestros.html.twig', [
             'form' => $form->createView(),
-            'roles' => $roles,
+            'rolesSiniestro' => $roles,
         ]);
     }
+
+    #[Route('/reporte/estado-alcoholico', name: 'reporte_estado_alcoholico')]
+    public function reporteEstadoAlcoholico(Request $request, DetalleSiniestroRepository $repo): Response
+    {
+        $form = $this->createForm(SiniestroFiltroType::class);
+        $form->handleRequest($request);
+
+        $filtros = $form->getData() ?? [];
+        $datos = $repo->reporteEstadoAlcoholico($filtros);
+
+        return $this->render('reportes/estado_alcoholico.html.twig', [
+            'form' => $form->createView(),
+            'datos' => $datos,
+        ]);
+    }
+
+
+    #[Route('/reporte/tipo-vehiculo', name: 'reporte_tipo_vehiculo')]
+    public function reporteTipoVehiculo(Request $request, DetalleSiniestroRepository $repo): Response
+    {
+        $form = $this->createForm(SiniestroFiltroType::class);
+        $form->handleRequest($request);
+
+        $filtros = $form->getData() ?? [];
+        $datos = $repo->reporteTipoVehiculo($filtros);
+
+        return $this->render('reportes/tipo_vehiculo.html.twig', [
+            'form' => $form->createView(),
+            'datos' => $datos,
+        ]);
+    }
+
+
+    #[Route('/reporte/sexo', name: 'reporte_por_sexo')]
+    public function reportePorSexo(Request $request, DetalleSiniestroRepository $repo): Response
+    {
+        $form = $this->createForm(SiniestroFiltroType::class);
+        $form->handleRequest($request);
+
+        $filtros = $form->getData() ?? [];
+        $datos = $repo->reportePorSexo($filtros);
+
+        return $this->render('reportes/por_sexo.html.twig', [
+            'form' => $form->createView(),
+            'datos' => $datos,
+        ]);
+    }
+
+
+    #[Route('/reporte/localidad', name: 'reporte_por_localidad')]
+    public function reportePorLocalidad(Request $request, SiniestroRepository $repo): Response
+    {
+        $form = $this->createForm(SiniestroFiltroType::class);
+        $form->handleRequest($request);
+
+        $filtros = $form->getData() ?? [];
+        $datos = $repo->reportePorLocalidad($filtros);
+
+        return $this->render('reportes/por_localidad.html.twig', [
+            'form' => $form->createView(),
+            'datos' => $datos,
+        ]);
+    }
+
+
+
+
 
 
     #[Route('/filtros', name: 'siniestro_filtros')]
@@ -171,7 +238,7 @@ public function new(Request $request, ManagerRegistry $doctrine): Response
             <td>'.$s->getUbicacion().'</td>
             <td>'.$s->getDescripcion().'</td>
             <td>'.$s->getLocalidad()?->getNombre().'</td>
-            <td>'.$s->getClima()?->getNombre().'</td>
+            <td>'.$s->getClima()?->getDescripcion().'</td>
             <td>'.$s->getCalle().'</td>
             <td>'.$s->getAltura().'</td>
         </tr>';

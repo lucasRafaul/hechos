@@ -61,4 +61,30 @@ class SiniestroRepository extends ServiceEntityRepository
             return $qb->getQuery()->getResult();
         }
 
+        public function reportePorLocalidad(array $filtros): array
+        {
+            $qb = $this->createQueryBuilder('s')
+                ->select('l.nombre AS localidad, COUNT(s.id) AS cantidad')
+                ->join('s.localidad', 'l')
+                ->groupBy('l.nombre')
+                ->orderBy('cantidad', 'DESC');
+
+            if (!empty($filtros['fechaDesde'])) {
+                $qb->andWhere('s.fecha >= :desde')
+                ->setParameter('desde', $filtros['fechaDesde']);
+            }
+
+            if (!empty($filtros['fechaHasta'])) {
+                $qb->andWhere('s.fecha <= :hasta')
+                ->setParameter('hasta', $filtros['fechaHasta']);
+            }
+
+            return $qb->getQuery()->getResult();
         }
+
+
+
+        }
+
+
+        

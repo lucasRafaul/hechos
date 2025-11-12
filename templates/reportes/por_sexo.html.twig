@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reporte por Sexo{% endblock %}
+
+{% block body %}
+<h1 class="mb-4 text-center">Reporte: Distribución por Sexo</h1>
+
+{{ form_start(form, {'attr': {'data-turbo': 'false'}}) }}
+<div class="row mb-3 justify-content-center">
+    <div class="col-md-3">{{ form_row(form.fechaDesde) }}</div>
+    <div class="col-md-3">{{ form_row(form.fechaHasta) }}</div>
+    <div class="col-md-2 d-flex align-items-end">
+        <button class="btn btn-primary w-100">Filtrar</button>
+    </div>
+</div>
+{{ form_end(form) }}
+
+{% if datos is not empty %}
+    {% set total = 0 %}
+    {% for d in datos %}
+        {% set total = total + d.cantidad %}
+    {% endfor %}
+    
+    <div class="mb-3 text-center">
+        <p><strong>Total de involucrados registrados:</strong> {{ total }}</p>
+    </div>
+
+    <table class="table table-striped table-bordered mt-3">
+        <thead class="table-dark text-center">
+            <tr>
+                <th>Sexo</th>
+                <th>Cantidad</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for d in datos %}
+                <tr class="text-center">
+                    <td>{{ d.sexo }}</td>
+                    <td>{{ d.cantidad }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="text-center mt-4">
+        <button id="btnChart" class="btn btn-info">📊 Ver gráfico</button>
+    </div>
+
+    <div class="mt-4 text-center">
+        <canvas id="chartSexo" style="max-width: 600px; margin: auto; display:none;"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.getElementById('btnChart').addEventListener('click', () => {
+            const canvas = document.getElementById('chartSexo');
+            canvas.style.display = 'block';
+            
+            const rawData = {{ datos|json_encode|raw }};
+            const labels = rawData.map(d => d.sexo);
+            const values = rawData.map(d => d.cantidad);
+
+            new Chart(canvas, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Cantidad por sexo',
+                        data: values,
+                        backgroundColor: ['#36a2eb', '#ff6384'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        title: {
+                            display: true,
+                            text: 'Distribución de involucrados por sexo',
+                            font: { size: 16 }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+{% else %}
+    <p class="text-center mt-3">No hay datos para el rango seleccionado.</p>
+{% endif %}
+
+{% endblock %}

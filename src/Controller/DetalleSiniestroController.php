@@ -52,4 +52,7 @@ class DetalleSiniestroController extends AbstractController
             'detalle' => $detalle
         ]);
     }
+
+
+    
 }

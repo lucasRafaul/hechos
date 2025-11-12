@@ -1,51 +1,104 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Reporte de Siniestros por Mes/Año{% endblock %}
+{% block title %}Reporte: Siniestros por Mes/Año{% endblock %}
 
 {% block body %}
-<h1 class="mb-3">Reporte: Cantidad de siniestros por mes/año</h1>
+<div class="card shadow-sm p-4">
+    <h2 class="text-primary mb-4">📅 Reporte: Cantidad de siniestros por mes/año</h2>
 
-{{ form_start(form, {'attr': {'data-turbo': 'false'}}) }}
-<div class="row mb-3">
-    <div class="col-md-3">{{ form_row(form.fechaDesde) }}</div>
-    <div class="col-md-3">{{ form_row(form.fechaHasta) }}</div>
-    <div class="col-md-2">
-        <button class="btn btn-primary mt-4">Filtrar</button>
+    {{ form_start(form, {'attr': {'data-turbo': 'false'}}) }}
+    <div class="row align-items-end g-3">
+        <div class="col-md-3">{{ form_row(form.fechaDesde) }}</div>
+        <div class="col-md-3">{{ form_row(form.fechaHasta) }}</div>
+        <div class="col-md-3">
+            <button class="btn btn-primary w-100">Filtrar</button>
+        </div>
+        <div class="col-md-3 text-md-end">
+            <a href="{{ path('reporte_roles_siniestros') }}" class="btn btn-outline-secondary w-100">
+                Ver distribución de roles
+            </a>
+        </div>
     </div>
-    <div class="text-end mb-3">
-    <a href="{{ path('reporte_roles_siniestros') }}" class="btn btn-secondary">
-        Ver distribución de roles
-    </a>
+    {{ form_end(form) }}
+
+    {% if datos is not empty %}
+        <div class="mt-4">
+            <table class="table table-striped table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Periodo</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for d in datos %}
+                        <tr>
+                            <td>{{ d.periodo }}</td>
+                            <td>{{ d.cantidad }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-4 text-center">
+            <button id="btnChart" class="btn btn-info text-white px-4">
+                📊 Mostrar gráfico
+            </button>
+        </div>
+
+        <div class="mt-4 text-center">
+            <canvas id="chart" style="max-width: 700px; height: 400px; margin: auto; display:none;"></canvas>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            document.getElementById('btnChart').addEventListener('click', () => {
+                const canvas = document.getElementById('chart');
+                canvas.style.display = 'block';
+
+                const rawData = {{ datos|json_encode|raw }};
+                const labels = rawData.map(d => d.periodo);
+                const values = rawData.map(d => d.cantidad);
+
+                new Chart(canvas, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Cantidad de siniestros',
+                            data: values,
+                            backgroundColor: '#145ea8aa',
+                            borderColor: '#0d3b66',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { stepSize: 1 }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            title: {
+                                display: true,
+                                text: 'Siniestros por Mes/Año',
+                                color: '#0d3b66',
+                                font: { size: 16, weight: 'bold' }
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+    {% else %}
+        <div class="alert alert-warning mt-4">
+            No hay datos para el rango seleccionado.
+        </div>
+    {% endif %}
 </div>
-</div>
-{{ form_end(form) }}
-
-{% if datos is not empty %}
-    <canvas id="chart"></canvas>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const rawData = {{ datos|json_encode|raw }};
-        const labels = rawData.map(d => d.periodo);
-        const values = rawData.map(d => d.cantidad);
-
-        new Chart(document.getElementById('chart'), {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Cantidad de siniestros',
-                    data: values,
-                }]
-            },
-            options: {
-                scales: {
-                    y: { beginAtZero: true }
-                }
-            }
-        });
-    </script>
-{% else %}
-    <p>No hay datos para el rango seleccionado.</p>
-{% endif %}
 {% endblock %}

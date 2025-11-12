@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reporte por Tipo de Vehículo{% endblock %}
+
+{% block body %}
+<h1 class="mb-4 text-center">Reporte: Distribución por Tipo de Vehículo</h1>
+
+{{ form_start(form, {'attr': {'data-turbo': 'false'}}) }}
+<div class="row mb-3 justify-content-center">
+    <div class="col-md-3">{{ form_row(form.fechaDesde) }}</div>
+    <div class="col-md-3">{{ form_row(form.fechaHasta) }}</div>
+    <div class="col-md-2 d-flex align-items-end">
+        <button class="btn btn-primary w-100">Filtrar</button>
+    </div>
+</div>
+{{ form_end(form) }}
+
+{% if datos is not empty %}
+    {% set total = 0 %}
+    {% for d in datos %}
+        {% set total = total + d.cantidad %}
+    {% endfor %}
+    
+    <div class="mb-3 text-center">
+        <p><strong>Total de vehículos registrados:</strong> {{ total }}</p>
+    </div>
+
+    <table class="table table-striped table-bordered mt-3">
+        <thead class="table-dark">
+            <tr class="text-center">
+                <th>Tipo de Vehículo</th>
+                <th>Cantidad</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for d in datos %}
+                <tr class="text-center">
+                    <td>{{ d.tipo }}</td>
+                    <td>{{ d.cantidad }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="text-center mt-4">
+        <button id="btnChart" class="btn btn-info">📊 Ver gráfico</button>
+    </div>
+
+    <div class="mt-4 text-center">
+        <canvas id="chartVehiculo" style="max-width: 700px; margin: auto; display:none;"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.getElementById('btnChart').addEventListener('click', () => {
+            const canvas = document.getElementById('chartVehiculo');
+            canvas.style.display = 'block';
+
+            const rawData = {{ datos|json_encode|raw }};
+            const labels = rawData.map(d => d.tipo);
+            const values = rawData.map(d => d.cantidad);
+
+            new Chart(canvas, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Cantidad por tipo de vehículo',
+                        data: values,
+                        backgroundColor: '#36a2eb',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: { y: { beginAtZero: true } },
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'Distribución de siniestros por tipo de vehículo',
+                            font: { size: 16 }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+{% else %}
+    <p class="text-center mt-3">No hay datos para el rango seleccionado.</p>
+{% endif %}
+
+{% endblock %}

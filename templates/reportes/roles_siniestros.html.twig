@@ -1,33 +1,64 @@
-{{ form_start(form, {'attr': {'data-turbo': 'false'}}) }}
-<div class="row mb-3">
-    <div class="col-md-3">{{ form_row(form.fechaDesde) }}</div>
-    <div class="col-md-3">{{ form_row(form.fechaHasta) }}</div>
-    <div class="col-md-2">
-        <button class="btn btn-primary mt-4">Filtrar</button>
+{% extends 'base.html.twig' %}
+
+{% block title %}Reporte por Rol en Siniestros{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">Reporte de Roles en Siniestros</h1>
+
+    {{ form_start(form, {'attr': {'data-turbo': 'false'}}) }}
+    <div class="row mb-3 justify-content-center">
+        <div class="col-md-3">{{ form_row(form.fechaDesde) }}</div>
+        <div class="col-md-3">{{ form_row(form.fechaHasta) }}</div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button class="btn btn-primary w-100">Filtrar</button>
+        </div>
     </div>
+    {{ form_end(form) }}
+
+    {% if rolesSiniestro is not empty %}
+        <div class="card shadow-sm mt-4">
+            <div class="card-body">
+                <canvas id="rolesChart" style="max-height: 400px;"></canvas>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const data = {{ rolesSiniestro|json_encode|raw }};
+            console.log("Datos roles:", data);
+
+            const labels = data.map(r => r.rol);
+            const values = data.map(r => r.cantidad);
+
+            new Chart(document.getElementById('rolesChart'), {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Distribución de Roles en Siniestros',
+                        data: values,
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(255, 206, 86, 0.7)',
+                            'rgba(75, 192, 192, 0.7)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        title: { display: true, text: 'Distribución de Roles' }
+                    }
+                }
+            });
+        </script>
+    {% else %}
+        <div class="alert alert-warning text-center mt-4">
+            No hay datos para los filtros seleccionados.
+        </div>
+    {% endif %}
 </div>
-{{ form_end(form) }}
-
-{% if roles is not empty %}
-    <canvas id="rolesChart"></canvas>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const data = {{ roles|json_encode|raw }};
-        const labels = data.map(r => r.rol);
-        const values = data.map(r => r.cantidad);
-
-        new Chart(document.getElementById('rolesChart'), {
-            type: 'pie',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Distribución de roles',
-                    data: values,
-                }]
-            }
-        });
-    </script>
-{% else %}
-    <p>No hay datos para los filtros seleccionados.</p>
-{% endif %}
+{% endblock %}

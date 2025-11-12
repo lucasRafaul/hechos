@@ -1,12 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Registro de usuario{% endblock %}
+{% block title %}Registrar Usuario{% endblock %}
 
 {% block body %}
-<div class="container mt-4">
-    <h2>Registrar nuevo usuario</h2>
+<div class="card shadow-sm p-4">
+    <h2 class="text-primary mb-3">Registrar nuevo usuario</h2>
     {{ form_start(form) }}
         {{ form_widget(form) }}
     {{ form_end(form) }}
+
+    <p class="text-center mt-3 mb-0">
+                ¿Ya tenés cuenta?
+                <a href="{{ path('app_login') }}" class="text-decoration-none">Iniciá sesión</a>
+            </p>
 </div>
 {% endblock %}

@@ -1,22 +1,37 @@
-<h2>Nuevo Siniestro</h2>
+{% extends 'base.html.twig' %}
 
-{{ form_start(form) }}
-    {{ form_row(form.fecha) }}
-    {{ form_row(form.ubicacion) }}
-    {{ form_row(form.localidad) }}
-    {{ form_row(form.clima) }}
-    {{ form_row(form.calle) }}
-    {{ form_row(form.altura) }}
-    {{ form_row(form.descripcion) }}
+{% block title %}Nuevo Siniestro{% endblock %}
 
-    <h3>Detalles del Siniestro</h3>
-    <div data-prototype="{{ form_widget(form.detalleSiniestros.vars.prototype)|e('html_attr') }}">
-        {{ form_widget(form.detalleSiniestros) }}
-    </div>
+{% block body %}
+<div class="card shadow-sm p-4">
+    <h2 class="text-primary mb-3">Registrar nuevo siniestro</h2>
 
-    <button type="submit" class="btn btn-primary">Guardar Siniestro y Detalles</button>
-{{ form_end(form) }}
-<button type="button" id="add-detalle" class="btn btn-success">Agregar otro detalle</button>
+    {{ form_start(form) }}
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(form.fecha) }}
+                {{ form_row(form.ubicacion) }}
+                {{ form_row(form.localidad) }}
+                {{ form_row(form.clima) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.calle) }}
+                {{ form_row(form.altura) }}
+                {{ form_row(form.descripcion) }}
+            </div>
+        </div>
+
+        <h4 class="mt-4">Detalles del siniestro</h4>
+        <div data-prototype="{{ form_widget(form.detalleSiniestros.vars.prototype)|e('html_attr') }}">
+            {{ form_widget(form.detalleSiniestros) }}
+        </div>
+
+        <div class="mt-3 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="button" id="add-detalle" class="btn btn-success">Agregar otro detalle</button>
+        </div>
+    {{ form_end(form) }}
+</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -33,14 +48,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 </script>
-
-
-
-{# <form method="post">
-    <input type="date" name="fecha" placeholder="Fecha" value="{{ siniestro ? siniestro.fecha|date('Y-m-d') : '' }}">
-    <input type="text" name="localidad" placeholder="Localidad" value="{{ siniestro ? siniestro.localidad : '' }}">
-    <input type="text" name="calle" placeholder="Calle" value="{{ siniestro ? siniestro.calle : '' }}">
-    <input type="text" name="coordenadas" placeholder="Coordenadas" value="{{ siniestro ? siniestro.coordenadas : '' }}">
-    <textarea name="descripcion" placeholder="Descripción">{{ siniestro ? siniestro.descripcion : '' }}</textarea>
-    <button type="submit" class="btn btn-primary">Guardar</button>
-</form> #}
+{% endblock %}
