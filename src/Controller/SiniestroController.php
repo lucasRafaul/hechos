@@ -297,7 +297,6 @@ public function new(Request $request, ManagerRegistry $doctrine): Response
     foreach ($siniestros as $s) {
         $html .= '<tr>
             <td>'.$s->getFecha()?->format('Y-m-d').'</td>
-            <td>'.$s->getUbicacion().'</td>
             <td>'.$s->getDescripcion().'</td>
             <td>'.$s->getLocalidad()?->getNombre().'</td>
             <td>'.$s->getClima()?->getDescripcion().'</td>

@@ -29,6 +29,7 @@ class SiniestroType extends AbstractType
             ->add('descripcion', TextareaType::class)
             ->add('detalleSiniestros', CollectionType::class, [
                 'entry_type' => DetalleSiniestroType::class,
+                'entry_options' => ['embedded' => true],
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,

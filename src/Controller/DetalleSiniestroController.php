@@ -71,6 +71,26 @@ class DetalleSiniestroController extends AbstractController
         return $this->redirectToRoute('detalle_list');
     }
 
+     #[Route('/{id}/editar', name: 'detalle_siniestro_edit', methods: ['GET','POST'])]
+        public function edit(Request $request, DetalleSiniestro $detalle, ManagerRegistry $doctrine): Response
+        {
+            $em = $doctrine->getManager();
+            $form = $this->createForm(DetalleSiniestroType::class, $detalle);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $em->flush();
+                $this->addFlash('success', 'Detalle actualizado correctamente.');
+                return $this->redirectToRoute('detalle_show', ['id' => $detalle->getId()]);
+            }
+
+            return $this->render('detalleSiniestro/edit.html.twig', [
+                'detalle' => $detalle,
+                'form' => $form->createView(),
+            ]);
+        }
+
+
 
 
     

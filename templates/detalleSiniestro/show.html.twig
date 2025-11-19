@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Detalle del Siniestro - {{ detalle.id }}{% endblock %}
+
+{% block body %}
+<div class="card shadow-sm p-4">
+    <h2 class="text-primary mb-4">Detalle del Siniestro</h2>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <p><strong>Persona:</strong> {{ detalle.idPersona.nombre }} {{ detalle.idPersona.apellido }}</p>
+            <p><strong>Rol:</strong> {{ detalle.rol ? detalle.rol.descripcion : 'Sin rol' }}</p>
+            <p><strong>Vehículo:</strong> {{ detalle.tipoVehiculo ? detalle.tipoVehiculo.descripcion : 'No aplica' }}</p>
+        </div>
+
+        <div class="col-md-6">
+            <p><strong>Estado alcohólico:</strong> {{ detalle.estadoAlcoholico }}</p>
+            <p><strong>Porcentaje alcohol:</strong> {{ detalle.porcentajeAlcohol }}</p>
+            <p><strong>Observaciones:</strong> {{ detalle.observaciones ?: '—' }}</p>
+        </div>
+    </div>
+
+    <div class="mt-4 d-flex gap-2">
+        <a href="{{ path('siniestro_show', {id: detalle.idSiniestro.id}) }}" class="btn btn-secondary">Volver al siniestro</a>
+        <a href="{{ path('detalle_siniestro_edit', {id: detalle.id}) }}" class="btn btn-warning">Editar</a>
+    </div>
+</div>
+{% endblock %}

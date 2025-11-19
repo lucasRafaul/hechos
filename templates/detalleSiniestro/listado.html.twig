@@ -29,7 +29,7 @@
             {% for d in detalles %}
                 <tr>
                     <td><span class="badge bg-secondary">{{ d.id }}</span></td>
-                    <td>{{ d.idSiniestro.ubicacion() }} - {{ d.idSiniestro.fecha|date('Y-m-d H:i') }}</td>
+                    <td>{{ d.idSiniestro.fecha|date('Y-m-d') }}</td>
                     <td>{{ d.idPersona.nombre }} {{ d.idPersona.apellido }}</td>
                     <td>{{ d.rol ? d.rol.descripcion : 'Sin rol' }}</td>
                     <td>

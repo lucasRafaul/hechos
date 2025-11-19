@@ -3,12 +3,16 @@
 namespace App\Entity;
 
 use App\Repository\DetalleSiniestroRepository;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DetalleSiniestroRepository::class)]
-//#[UniqueEntity(fields: ['persona', 'siniestro', 'rol'], message: 'Esta persona ya tiene ese rol en este siniestro.')]
+#[UniqueEntity(
+    fields: ['id_persona', 'id_siniestro'],
+    message: 'Esta persona ya tiene un rol asignado en este siniestro.'
+)]
 class DetalleSiniestro
 {
     #[ORM\Id]

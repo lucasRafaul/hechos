@@ -9,7 +9,7 @@
     <div class="row mb-3">
         <div class="col-md-6">
             <p><strong>ID:</strong> {{ siniestro.id }}</p>
-            <p><strong>Fecha:</strong> {{ siniestro.fecha|date('Y-m-d') }}</p>
+            <p><strong>Fecha:</strong> {{ siniestro.fecha ? siniestro.fecha|date('Y-m-d H:i') : '—' }}</p>
             <p><strong>Calle:</strong> {{ siniestro.calle }}</p>
             <p><strong>Altura:</strong> {{ siniestro.altura }}</p>
         </div>
@@ -20,9 +20,45 @@
         </div>
     </div>
 
+    <h3 class="text-primary mt-4">Personas involucradas</h3>
+
+    <table class="table table-bordered table-striped mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>Persona</th>
+                <th>Rol</th>
+                <th>Vehículo</th>
+                <th>Estado Alcohol</th>
+                <th>Porcentaje</th>
+                <th>Observaciones</th>
+                <th style="width:140px">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for d in siniestro.detalleSiniestros %}
+                <tr>
+                    <td>{{ d.idPersona.nombre }} {{ d.idPersona.apellido }}</td>
+                    <td>{{ d.rol ? d.rol.descripcion : '—' }}</td>
+                    <td>{{ d.tipoVehiculo ? d.tipoVehiculo.descripcion : '—' }}</td>
+                    <td>{{ d.estadoAlcoholico ?: '—' }}</td>
+                    <td>{{ d.porcentajeAlcohol ?: '—' }}</td>
+                    <td>{{ d.observaciones ?: '—' }}</td>
+                    <td>
+                        <a href="{{ path('detalle_show', {id: d.id}) }}" class="btn btn-sm btn-primary">Ver</a>
+                        <a href="{{ path('detalle_siniestro_edit', {id: d.id}) }}" class="btn btn-sm btn-warning">Editar</a>
+                    </td>
+                    
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7" class="text-center">No hay personas cargadas en este siniestro.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
     <div class="mt-4 d-flex gap-2">
-        <a href="{{ path('siniestro_list') }}" class="btn btn-secondary"> Volver al listado</a>
+        <a href="{{ path('siniestro_list') }}" class="btn btn-secondary">Volver al listado</a>
     </div>
 </div>
 {% endblock %}

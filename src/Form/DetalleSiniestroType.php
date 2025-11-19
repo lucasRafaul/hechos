@@ -16,11 +16,19 @@ class DetalleSiniestroType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('id_siniestro', EntityType::class, [
+        // SOLO mostrar id_siniestro si el form NO está embebido
+        if (!$options['embedded']) {
+            $builder->add('id_siniestro', EntityType::class, [
                 'class' => Siniestro::class,
                 'choice_label' => 'id'
-            ])
+            ]);
+        }
+
+        $builder
+            //->add('id_siniestro', EntityType::class, [
+                //'class' => Siniestro::class,
+                //'choice_label' => 'id'
+            //])
             ->add('id_persona', EntityType::class, [
                 'class' => Persona::class,
                 'choice_label' => function($persona) { return $persona->getNombre().' '.$persona->getApellido(); }
@@ -47,6 +55,8 @@ class DetalleSiniestroType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(['data_class' => DetalleSiniestro::class]);
+        $resolver->setDefaults(['data_class' => DetalleSiniestro::class, 
+        'embedded' => false, 
+    ]);
     }
 }

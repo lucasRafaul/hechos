@@ -21,29 +21,55 @@
         </div>
 
         <h4 class="mt-4">Detalles del siniestro</h4>
-        <div data-prototype="{{ form_widget(form.detalleSiniestros.vars.prototype)|e('html_attr') }}">
-            {{ form_widget(form.detalleSiniestros) }}
+
+        <div id="detalle-container"
+             data-prototype="{{ form_row(form.detalleSiniestros.vars.prototype,{label: false})|e('html_attr') }}">
+            {% for detalleForm in form.detalleSiniestros %}
+                <div class="detalle-item border p-3 rounded mb-3">
+                    {{ form_row(detalleForm) }}
+
+                    <button type="button"
+                            class="btn btn-danger mt-2 remove-detalle">
+                        Eliminar este detalle
+                    </button>
+                </div>
+            {% endfor %}
         </div>
 
         <div class="mt-3 d-flex gap-2">
             <button type="submit" class="btn btn-primary">Guardar</button>
             <button type="button" id="add-detalle" class="btn btn-success">Agregar otro detalle</button>
         </div>
+        
     {{ form_end(form) }}
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const container = document.querySelector('[data-prototype]');
+    const container = document.getElementById('detalle-container');
     const addButton = document.getElementById('add-detalle');
-    let index = container.children.length;
+
+    let index = container.querySelectorAll('.detalle-item').length;
 
     addButton.addEventListener('click', () => {
         const prototype = container.dataset.prototype.replace(/__name__/g, index);
-        const newForm = document.createElement('div');
-        newForm.innerHTML = prototype;
-        container.appendChild(newForm);
+
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('detalle-item', 'border', 'p-3', 'rounded', 'mb-3');
+        wrapper.innerHTML = prototype + `
+            <button type="button" class="btn btn-danger mt-2 remove-detalle">
+                Eliminar este detalle
+            </button>
+        `;
+
+        container.appendChild(wrapper);
         index++;
+    });
+
+    container.addEventListener('click', (e) => {
+        if (e.target.classList.contains('remove-detalle')) {
+            e.target.closest('.detalle-item').remove();
+        }
     });
 });
 </script>
