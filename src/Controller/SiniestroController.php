@@ -84,6 +84,36 @@ public function new(Request $request, ManagerRegistry $doctrine): Response
         return $this->redirectToRoute('siniestro_list');
     }
 
+    #[Route('/edit/{id}', name: 'siniestro_edit')]
+public function edit(int $id, Request $request, ManagerRegistry $doctrine): Response
+{
+    $em = $doctrine->getManager();
+    $siniestro = $em->getRepository(Siniestro::class)->find($id);
+
+    if (!$siniestro) {
+        throw $this->createNotFoundException('Siniestro no encontrado.');
+    }
+
+    $form = $this->createForm(SiniestroType::class, $siniestro);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        foreach ($siniestro->getDetalleSiniestros() as $detalle) {
+            $detalle->setIdSiniestro($siniestro);
+            $em->persist($detalle);
+        }
+
+        $em->flush();
+
+        return $this->redirectToRoute('siniestro_list');
+    }
+
+    return $this->render('siniestro/form.html.twig', [
+        'form' => $form->createView(),
+        'siniestro' => $siniestro,
+    ]);
+}
+
 
     #[Route('/siniestros-mes', name: 'reporte_siniestros_mes')]
     public function siniestrosPorMes(Request $request, SiniestroRepository $repo): Response
